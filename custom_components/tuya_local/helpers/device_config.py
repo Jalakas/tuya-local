@@ -151,7 +151,14 @@ class TuyaDeviceConfig:
             _LOGGER.debug(
                 "Not match for %s, missing required DPs: %s",
                 self.name,
-                [{dp.id: dp.type.__name__} for dp in missing_dps],
+                [
+                    {
+                        dp.id: dp.type.__name__
+                        if dp.type
+                        else f"Invalid/Unsupported type (check YAML config for id {dp.id}, name: '{getattr(dp, 'name', 'unnamed')}')"
+                    }
+                    for dp in missing_dps
+                ],
             )
 
         incorrect_type_dps = [
@@ -163,7 +170,14 @@ class TuyaDeviceConfig:
             _LOGGER.debug(
                 "Not match for %s, DPs have incorrect type: %s",
                 self.name,
-                [{dp.id: dp.type.__name__} for dp in incorrect_type_dps],
+                [
+                    {
+                        dp.id: dp.type.__name__
+                        if dp.type
+                        else f"Invalid/Unsupported type (check YAML config for id {dp.id}, name: '{getattr(dp, 'name', 'unnamed')}')"
+                    }
+                    for dp in incorrect_type_dps
+                ],
             )
             if product_match:
                 _LOGGER.warning(
